@@ -1,0 +1,33 @@
+# syntax
+'''x = lambda param1, param2, param3: param1 + param2 + param2
+print(x(arg1, arg2, arg3))'''
+
+# Named function
+def add_two_nums(a, b):
+    return a + b
+
+print(add_two_nums(9, 9))     # 5
+
+# Lets change the above function to a lambda function
+add_two_nums = lambda a, b: a + b
+print(add_two_nums(2,2))    # 5
+
+# Self invoking lambda function
+print((lambda a, b: a + b)(6,6)) # 5 - need to encapsulate it in print() to see the result in the console
+
+square = lambda x : x ** 2
+print(square(3))    # 9
+cube = lambda x : x ** 3
+print(cube(3))    # 27
+
+# Multiple variables
+multiple_variable = lambda a, b, c: a ** 2 - 3 * b + 4 * c
+print(multiple_variable(5, 5, 3)) # 22
+
+def power(x):
+    return lambda n : x ** n
+
+cube = power(2)(3)   # function power now need 2 arguments to run, in separate rounded brackets
+print(cube)          # 8
+two_power_of_five = power(2)(5) 
+print(two_power_of_five)  # 32
