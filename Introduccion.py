@@ -1,43 +1,23 @@
-#Numeros
+# Introduction
+# Day 1 - 30DaysOfPython Challenge
 
-numero1 = 17
-numero2 = 3
-print(numero1 + numero2)
-print(numero1 - numero2)
-print(numero1 * numero2)
-print(numero1 / numero2) #Siempre devuleve un numero flotante
-print(numero1 // numero2) #Alternativa para el resultado sea entero
-print(numero1 % numero2) # devuelve el residuo de la operacion
+print(2 + 3)   # addition(+)
+print(3 - 1)   # subtraction(-)
+print(2 * 3)   # multiplication(*)
+print(3 / 2)   # division(/)
+print(3 ** 2)  # exponential(**)
+print(3 % 2)   # modulus(%)
+print(3 // 2)  # Floor division operator(//)
 
-# Cadenas
+# Checking data types
 
-texto1 = "Hola mundo como estas"
-texto2 = 'Endo Rodrigo Rodrigureez'
-
-print(f'Verificacion de los textos {texto1} - {texto2}')
-
-indece = 'Python'
-print(indece[0])
-print(indece[-1])
-
-#List
-
-squares = [1,4,9,16,25]
-
-#Forma de obtener valores de las listas
-print(squares[0])
-print(squares[-1])
-print(squares[-3:])
-
-squares.append(99)
-print(squares)
-
-#Incio de una serie fibinachi
-
-a, b = 0, 1
-while a < 10:
-    print(a)
-    a, b = b, a+b
-
+print(type(10))                  # Int
+print(type(3.14))                # Float
+print(type(1 + 3j))              # Complex
+print(type('Asabeneh'))          # String
+print(type([1, 2, 3]))           # List
+print(type({'name':'Asabeneh'})) # Dictionary
+print(type({9.8, 3.14, 2.7}))    # Set
+print(type((9.8, 3.14, 2.7)))    # Tuple
 
 
