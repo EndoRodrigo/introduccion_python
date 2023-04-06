@@ -1,4 +1,4 @@
-#Creacion del juego piedra papel y tijera version 2
+#Creacion del juego piedra papel y tijera version 3
 import random
 
 while True:
@@ -14,29 +14,15 @@ while True:
 
     computer = random.randint(1, 3)
 
-    if not user in opciones: 
-        print('== END GAME ==')
-        break
-
     if user == computer:
         print(f"User -> {user} & computadora -> {computer} == EMPATE")
 
-    if user == 1 and computer == 2:
+    if (user == 1 and computer == 2) or (user == 2 and computer == 3) or (user == 3 and computer == 1):
         print(f"User -> {user} & computadora -> {computer} == GANANA LA COMPUTADORA")
 
-    if user == 1 and computer == 3:
+    if (user == 1 and computer == 3) or (user == 2 and computer == 1) or (user == 3 and computer == 2):
         print(f"User -> {user} & computadora -> {computer} == GANA EL USUARIO")
 
-    if user == 2 and computer == 1:
-        print(f"User -> {user} & computadora -> {computer} == GANANA LA COMPUTADORA")
-
-    if user == 2 and computer == 3:
-        print(f"User -> {user} & computadora -> {computer} == GANA EL USUARIO")
-
-    if user == 3 and computer == 1:
-        print(f"User -> {user} & computadora -> {computer} == GANANA LA COMPUTADORA")
-
-    if user == 3 and computer == 2:
-        print(f"User -> {user} & computadora -> {computer} == GANA EL USUARIO")
-
-
+    if not user in opciones: 
+        print('== END GAME ==')
+        break
