@@ -2,6 +2,8 @@ import store
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
+#uvicorn main:app reload para ejecutar servicio
+
 app = FastAPI()
 
 @app.get('/')

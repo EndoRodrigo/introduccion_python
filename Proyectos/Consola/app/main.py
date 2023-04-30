@@ -10,15 +10,15 @@ def run():
   countries = list(map(lambda x: x['Country'], data))
   percentages = list(map(lambda x: x['World Population Percentage'], data))
   '''
-
-  df = pd.read_csv('data.csv')
-  df = df[df['Continent'] == 'Africa']
+  ruta = 'C:/Users/User/Documents/Python/Proyectos/Consola/app/data.csv'
+  df = pd.read_csv(ruta)
+  df = df[df.get('Continent') == 'Africa']
 
   countries = df['Country'].values
   percentages = df['World Population Percentage'].values
   charts.generate_pie_chart(countries, percentages)
 
-  data = read_csv.read_csv('data.csv')
+  data = read_csv.read_csv(ruta)
   country = input('Type Country => ')
   print(country)
 
@@ -28,7 +28,8 @@ def run():
     country = result[0]
     print(country)
     labels, values = utils.get_population(country)
-    charts.generate_bar_chart(country['Country'], labels, values)
+    print("OBTENIEDO CIUDAD",country.get('Country'))
+    charts.generate_bar_chart(country.get('Country'), labels, values)
 
 if __name__ == '__main__':
   run()
