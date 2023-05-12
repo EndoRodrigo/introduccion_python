@@ -1,11 +1,16 @@
 from fastapi import FastAPI, Body, Path, Query
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional
+from config.database import Session, engine, Base
+from models.movie import Movie as MovieModel
 
 
 app = FastAPI()
 app.title = "Mi aplicacion con FastApi"
 app.version = "0.0.1"
+
+Base.metadata.create_all(bind=engine)
 
 class Movie(BaseModel):
     id:Optional[int] = None
@@ -19,9 +24,9 @@ class Movie(BaseModel):
         schema_extra = {
             "example":{
                 "id": 1,
-                "title": "Mi peliculña",
-                "overview": "Descripcion de la pelicula",
-                "year": 2023,
+                "title": "Mi peliculia",
+                "overview": "Descripcion",
+                "year": 2013,
                 "rating": 9.8,
                 "category": "Accion"
             }
@@ -67,8 +72,12 @@ def get_movies_category(category: str = Query(min_length=3,max_length=15)):
 
 @app.post('/movies/', tags=['Movies'])
 def create_movie(pelicula: Movie):
+    db = Session()
+    new_movie = MovieModel(**pelicula.dict())
+    db.add(new_movie)
+    db.commit()
     movies.append(pelicula)
-    return movies[-1]
+    return JSONResponse(status_code=201, content={"Mensaje: ": "Se ha registrado los datos con exito"})
 
 @app.put('/movies/{id}', tags=['Movies'])
 def update_movie(id:int, pelicula: Movie):
