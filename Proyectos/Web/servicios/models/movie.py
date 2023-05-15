@@ -9,5 +9,4 @@ class Movie(Base):
     overview = Column(String)
     year = Column(Integer)
     rating = Column(Float)
-    ratng = Column(String)
     category = Column(String)

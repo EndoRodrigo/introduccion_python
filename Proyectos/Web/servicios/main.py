@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from config.database import Session, engine, Base
 from models.movie import Movie as MovieModel
+from fastapi.encoders import jsonable_encoder
 
 
 app = FastAPI()
@@ -56,19 +57,26 @@ def msg():
 
 @app.get('/peliculas',tags=['Movies'])
 def get_movies():
-    return movies
+    db = Session()
+    result = db.query(MovieModel).all()
+    return JSONResponse(status_code=200, content=jsonable_encoder(result))
+
 
 @app.get('/peliculas/{id}',tags=['Movies'])
 def get_movie(id: int = Path(ge=1,le=2000)):
-    for movi in movies:
-        if movi['id'] == id:
-            return movi
-        
-    return []
+    db = Session()
+    result = db.query(MovieModel).filter(MovieModel.id == id).first()
+    if not result:
+        return JSONResponse(status_code=404, content={"Mensaje":"No se encontaron resultados"})
+    return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 @app.get('/movies/',tags=['Movies'])
 def get_movies_category(category: str = Query(min_length=3,max_length=15)):
-    return [item for item in movies if item['category'] == category]
+    db = Session()
+    result = db.query(MovieModel).filter(MovieModel.category == category).first()
+    if not result:
+        return JSONResponse(status_code=404, content={"Mensaje":"No se encontaron resultados"})
+    return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 @app.post('/movies/', tags=['Movies'])
 def create_movie(pelicula: Movie):
@@ -81,20 +89,26 @@ def create_movie(pelicula: Movie):
 
 @app.put('/movies/{id}', tags=['Movies'])
 def update_movie(id:int, pelicula: Movie):
-    for movi in movies:
-        if movi['id'] == id:
-            movi['title'] = pelicula.title
-            movi['overview'] = pelicula.overview
-            movi['year']= pelicula.year
-            movi['rating']= pelicula.rating
-            movi['category']= pelicula.category
-            return movies
+    db = Session()
+    result = db.query(MovieModel).filter(MovieModel.id == id).first()
+    if not result:
+        return JSONResponse(status_code=404, content={"Mensaje":"No se encontaron resultados"})
+    result.title = pelicula.title
+    result.overview = pelicula.overview
+    result.year = pelicula.year
+    result.rating = pelicula.rating
+    result.category = pelicula.category
+    db.commit()
+    return JSONResponse(status_code=200, content={"Mensaje":"Informacion actualizada"})
+
 
 @app.delete('/movies/{id}', tags=['Movies'])
 def delete_movie(id: int):
-    for movi in movies:
-        if movi['id'] == id:
-            movies.remove(movi)
-            return movies
-    return []
+    db = Session()
+    result = db.query(MovieModel).filter(MovieModel.id == id).first()
+    if not result:
+        return JSONResponse(status_code=404, content={"Mensaje":"No se encontaron resultados"})
+    db.delete(result)
+    db.commit()
+    return JSONResponse(status_code=200, content={"Mensaje":"Informacion eliminada"})
     
