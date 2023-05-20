@@ -1,78 +1,43 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from config.database import engine, Base
+from middlewares.error_handler import ErrorHandler
+from routers.movie import movie_router
+from routers.user import user_router
 
 app = FastAPI()
-app.title = "Mi aplicacion con FastApi"
+app.title = "Mi aplicación con  FastAPI"
 app.version = "0.0.1"
 
-movies = [{
-    'id': 1,
-    'title': 'Avatar',
-    'overview': 'En un exceburente planeta llamado pandora',
-    'year': '2009',
-    'rating': 7.8,
-    'category': 'Otro'
-},
-{
-    'id': 2,
-    'title': 'Robocot',
-    'overview': 'La nueva maquina de a policia',
-    'year': '2000',
-    'rating': 9.8,
-    'category': 'Acccion'
-}
+app.add_middleware(ErrorHandler)
+
+app.include_router(movie_router)
+app.include_router(user_router)
+
+
+Base.metadata.create_all(bind=engine)
+
+
+movies = [
+    {
+		"id": 1,
+		"title": "Avatar",
+		"overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
+		"year": "2009",
+		"rating": 7.8,
+		"category": "Acción"
+	},
+    {
+		"id": 2,
+		"title": "Avatar",
+		"overview": "En un exuberante planeta llamado Pandora viven los Na'vi, seres que ...",
+		"year": "2009",
+		"rating": 7.8,
+		"category": "Acción"
+	}
 ]
 
-@app.get('/', tags=['Home'])
-def msg():
-    return HTTPResponse('<h1>Hello World</h2>')
+@app.get('/', tags=['home'])
+def message():
+    return HTMLResponse('<h1>Hello world</h1>')
 
-@app.get('/peliculas',tags=['Movies'])
-def get_movies():
-    return movies
-
-@app.get('/peliculas/{id}',tags=['Movies'])
-def get_movie(id: int):
-    for movi in movies:
-        if movi['id'] == id:
-            return movi
-        
-    return []
-
-@app.get('/movies/',tags=['Movies'])
-def get_movies_category(category: str):
-    return [item for item in movies if item['category'] == category]
-
-@app.post('/movies/', tags=['Movies'])
-def create_movie(id:int = Body(), title:str= Body(), overview:str= Body(), year:int= Body(),rating:float= Body(), category:str= Body()):
-    movies.append(
-        {
-            'id': id,
-            'title': title,
-            'overview': overview,
-            'year': year,
-            'rating': rating,
-            'category': category
-        }
-    )
-
-    return movies[-1]
-
-@app.put('/movies/{id}', tags=['Movies'])
-def update_movie(id:int, title:str= Body(), overview:str= Body(), year:int= Body(),rating:float= Body(), category:str= Body()):
-    for movi in movies:
-        if movi['id'] == id:
-            movi['title'] = title
-            movi['overview'] = overview
-            movi['year']= year
-            movi['rating']= rating
-            movi['category']= category
-            return movies
-
-@app.delete('/movies/{id}', tags=['Movies'])
-def delete_movie(id: int):
-    for movi in movies:
-        if movi['id'] == id:
-            movies.remove(movi)
-            return movies
-    return []
-    
